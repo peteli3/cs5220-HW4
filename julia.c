@@ -19,7 +19,7 @@ static const double im_c = 0.58;  /* keep in the range of (-1,1)*/
 uint8_t julia_loop(double x, double y)
 {
     uint8_t n=255;
-    double re_z = x, im_z = y; 
+    double re_z = x, im_z = y;
     double sqr_abs_z = 0;
     while (sqr_abs_z < window && n != 0) {
         double re_z_now = re_z * re_z - im_z * im_z + re_c;
@@ -49,14 +49,21 @@ int main(int argc, char**argv)
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~ PARALLELIZE AND OFFLOAD ME ~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
     /* Main Computational Loop */
-    for (int i = 0; i < n; ++i){ 
-        for (int j = 0; j < n; ++j){
-            double x = -1.0 + (double)i*(2.0/(n-1)) ;
-            double y = -1.0 + (double)j*(2.0/(n-1)) ;
-            julia_counts[i + j*n] = julia_loop(x, y);
+    # pragma offload target(mic) in (n), inout (x, y)
+    {
+        # pragma omp parallel for
+        for (int i = 0; i < n; ++i){
+            for (int j = 0; j < n; ++j){
+                double x = -1.0 + (double) i * (2.0 / (n - 1));
+                double y = -1.0 + (double) j * (2.0 / (n - 1));
+                julia_counts[i + (j * n)] = julia_loop(x, y);
+            }
         }
     }
+
+
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~ PARALLELIZE AND OFFLOAD ME ~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
