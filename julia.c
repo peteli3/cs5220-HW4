@@ -7,11 +7,11 @@
 /* ~~~~~~~~~~ PARAMETERS TO PLAY AROUND WITH ~~~~~~~~~~*/
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* This determines the color distribution of the Julia Set */
-static const double window = 3.0; /* keep in the range of 1...10*/
+static const double window = 4.20; /* keep in the range of 1...10*/
 
 /* These determine the shape of the Julia Set */
-static const double re_c = -0.46; /* keep in the range of (-1,1)*/
-static const double im_c = 0.58;  /* keep in the range of (-1,1)*/
+static const double re_c = -0.88; /* keep in the range of (-1,1)*/
+static const double im_c = 0.69;  /* keep in the range of (-1,1)*/
 
 /* Julia Loop Logic: Don't touch unless you understand what to do! */
 __declspec(target(mic))
@@ -53,7 +53,7 @@ int main(int argc, char**argv)
     int i, j;
     # pragma offload target(mic) out( julia_counts : length(n*n) alloc_if(1) free_if(1) )
     {
-        # pragma omp parallel for
+        # pragma omp parallel for schedule(dynamic, 1)
         for (i = 0; i < n; ++i){
             for (j = 0; j < n; ++j){
                 double x = -1.0 + (double)i * (2.0 / (n - 1)) ;
