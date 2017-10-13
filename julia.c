@@ -45,8 +45,6 @@ int main(int argc, char**argv)
     uint8_t* julia_counts = (uint8_t*) calloc(n*n, sizeof(uint8_t));
     printf("Generating %d x %d Julia Set Data\n", n, n);
 
-    int start = omp_get_wtime();
-
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~ PARALLELIZE AND OFFLOAD ME ~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -68,9 +66,6 @@ int main(int argc, char**argv)
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~ PARALLELIZE AND OFFLOAD ME ~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-    int end = omp_get_wtime();
-    printf("time elapsed: %f seconds\n", end - start);
 
     /* Dump julia_counts into a .txt file named julia.txt*/
     FILE *fid = fopen("julia.txt", "w");
