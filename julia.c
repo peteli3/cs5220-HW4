@@ -50,15 +50,18 @@ int main(int argc, char**argv)
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     /* Main Computational Loop */
+    int i, j;
     # pragma offload target(mic) out(julia_counts)
+    {
         # pragma omp parallel for
-        for (int i = 0; i < n; ++i){
-            for (int j = 0; j < n; ++j){
+        for (i = 0; i < n; ++i){
+            for (j = 0; j < n; ++j){
                 double x = -1.0 + (double)i * (2.0 / (n - 1)) ;
                 double y = -1.0 + (double)j * (2.0 / (n - 1)) ;
                 julia_counts[i + (j * n)] = julia_loop(x, y);
             }
         }
+    }
 
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~ PARALLELIZE AND OFFLOAD ME ~~~~~~~~~~~~*/
@@ -67,8 +70,8 @@ int main(int argc, char**argv)
     /* Dump julia_counts into a .txt file named julia.txt*/
     FILE *fid = fopen("julia.txt", "w");
     fprintf(fid, "%d\n", n);
-    for (int i = 0; i < n; ++i)
-        for (int j = 0; j < n; ++j)
+    for (i = 0; i < n; ++i)
+        for (j = 0; j < n; ++j)
             fprintf(fid, "%d\n", julia_counts[i + j*n]);
     fclose(fid);
 
