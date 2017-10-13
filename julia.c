@@ -52,12 +52,12 @@ int main(int argc, char**argv)
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     /* Main Computational Loop */
-    double x; double y;
-    # pragma offload target(mic) in (n), inout (x, y)
+    double x; double y; int i; int j;
+    # pragma offload target(mic) in (n), out(julia_counts), inout (x, y)
     {
         # pragma omp parallel for private(x, y)
-        for (int i = 0; i < n; ++i){
-            for (int j = 0; j < n; ++j){
+        for (i = 0; i < n; ++i){
+            for (j = 0; j < n; ++j){
                 x = -1.0 + (double) i * (2.0 / (n - 1));
                 y = -1.0 + (double) j * (2.0 / (n - 1));
                 julia_counts[i + (j * n)] = julia_loop(x, y);
