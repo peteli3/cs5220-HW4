@@ -53,7 +53,7 @@ int main(int argc, char**argv)
     double x; double y; int i; int j;
     # pragma offload target(mic) in (n), out(julia_counts), inout (x, y)
     {
-        # pragma omp parallel for private(x, y)
+        # pragma omp parallel for
         for (i = 0; i < n; ++i){
             for (j = 0; j < n; ++j){
                 x = -1.0 + (double) i * (2.0 / (n - 1));
@@ -70,8 +70,8 @@ int main(int argc, char**argv)
     /* Dump julia_counts into a .txt file named julia.txt*/
     FILE *fid = fopen("julia.txt", "w");
     fprintf(fid, "%d\n", n);
-    for (int i = 0; i < n; ++i)
-        for (int j = 0; j < n; ++j)
+    for (i = 0; i < n; ++i)
+        for (j = 0; j < n; ++j)
             fprintf(fid, "%d\n", julia_counts[i + j*n]);
     fclose(fid);
 
