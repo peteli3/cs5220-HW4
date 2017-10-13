@@ -51,7 +51,7 @@ int main(int argc, char**argv)
 
     /* Main Computational Loop */
     double x; double y; int i; int j;
-    # pragma offload target(mic) in (n), out(julia_counts), inout (x, y)
+    # pragma offload target(mic), in (n), out(julia_counts), inout (x, y)
     {
         # pragma omp parallel for
         for (i = 0; i < n; ++i){
