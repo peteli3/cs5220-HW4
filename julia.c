@@ -12,7 +12,7 @@ static const double window = 3.0; /* keep in the range of 1...10*/
 /* These determine the shape of the Julia Set */
 static const double re_c = -0.46; /* keep in the range of (-1,1)*/
 static const double im_c = 0.58;  /* keep in the range of (-1,1)*/
-
+__declspec(target(mic));
 
 /* Julia Loop Logic: Don't touch unless you understand what to do! */
 uint8_t julia_loop(double x, double y)
