@@ -51,7 +51,6 @@ int main(int argc, char**argv)
 
     /* Main Computational Loop */
     # pragma offload target(mic), in (n), out(julia_counts)
-    {
         # pragma omp parallel for
         for (int i = 0; i < n; ++i){
             for (int j = 0; j < n; ++j){
@@ -60,7 +59,6 @@ int main(int argc, char**argv)
                 julia_counts[i + (j * n)] = julia_loop(x, y);
             }
         }
-    }
 
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~ PARALLELIZE AND OFFLOAD ME ~~~~~~~~~~~~*/
