@@ -61,13 +61,12 @@ int main(int argc, char**argv)
         }
     }
 
-
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~ PARALLELIZE AND OFFLOAD ME ~~~~~~~~~~~~*/
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     int end = omp_get_wtime();
-    printf("time elapsed: %f seconds", end - start);
+    printf("time elapsed: %f seconds\n", end - start);
 
     /* Dump julia_counts into a .txt file named julia.txt*/
     FILE *fid = fopen("julia.txt", "w");

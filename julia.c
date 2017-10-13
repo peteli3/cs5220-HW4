@@ -52,13 +52,14 @@ int main(int argc, char**argv)
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     /* Main Computational Loop */
+    double x; double y;
     # pragma offload target(mic) in (n), inout (x, y)
     {
-        # pragma omp parallel for
+        # pragma omp parallel for private(x, y)
         for (int i = 0; i < n; ++i){
             for (int j = 0; j < n; ++j){
-                double x = -1.0 + (double) i * (2.0 / (n - 1));
-                double y = -1.0 + (double) j * (2.0 / (n - 1));
+                x = -1.0 + (double) i * (2.0 / (n - 1));
+                y = -1.0 + (double) j * (2.0 / (n - 1));
                 julia_counts[i + (j * n)] = julia_loop(x, y);
             }
         }
@@ -69,7 +70,7 @@ int main(int argc, char**argv)
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
     int end = omp_get_wtime();
-    printf("time elapsed: %f seconds", end - start);
+    printf("time elapsed: %f seconds\n", end - start);
 
     /* Dump julia_counts into a .txt file named julia.txt*/
     FILE *fid = fopen("julia.txt", "w");
